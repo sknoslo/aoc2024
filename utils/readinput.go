@@ -12,3 +12,12 @@ func ReadInput(path string) (string, error) {
 
 	return string(bytes), nil
 }
+
+func MustReadInput(path string) string {
+	bytes, err := os.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+
+	return string(bytes)
+}

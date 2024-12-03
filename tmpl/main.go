@@ -1,19 +1,13 @@
 package main
 
 import (
-	"log"
 	"sknoslo/aoc2024/utils"
 )
 
 var input string
 
 func init() {
-	in, err := utils.ReadInput("input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	input = in
+	input = utils.MustReadInput("input.txt")
 }
 
 func main() {
