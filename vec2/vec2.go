@@ -1,11 +1,10 @@
-package utils
+package vec2
 
 type Vec2 struct {
-	X int
-	Y int
+	X, Y int
 }
 
-func NewVec2(x int, y int) Vec2 {
+func New(x int, y int) Vec2 {
 	return Vec2{x, y}
 }
 

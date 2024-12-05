@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sknoslo/aoc2024/utils"
+	"sknoslo/aoc2024/vec2"
 	"strings"
 )
 
@@ -10,15 +11,15 @@ var _ = fmt.Fprintln
 
 var input string
 
-var dirs = []utils.Vec2{
-	utils.NewVec2(0, -1),
-	utils.NewVec2(1, -1),
-	utils.NewVec2(1, 0),
-	utils.NewVec2(1, 1),
-	utils.NewVec2(0, 1),
-	utils.NewVec2(-1, 1),
-	utils.NewVec2(-1, 0),
-	utils.NewVec2(-1, -1),
+var dirs = []vec2.Vec2{
+	vec2.New(0, -1),
+	vec2.New(1, -1),
+	vec2.New(1, 0),
+	vec2.New(1, 1),
+	vec2.New(0, 1),
+	vec2.New(-1, 1),
+	vec2.New(-1, 0),
+	vec2.New(-1, -1),
 }
 
 func init() {
@@ -42,7 +43,7 @@ func partone() string {
 			dirloop:
 				for _, dir := range dirs {
 					for i, l := range "MAS" {
-						pos := utils.NewVec2(x, y).Add(dir.Mul(i + 1))
+						pos := vec2.New(x, y).Add(dir.Mul(i + 1))
 						if !pos.InRange(0, w-1, 0, h-1) || rows[pos.Y][pos.X] != byte(l) {
 							continue dirloop
 						}
