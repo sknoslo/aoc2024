@@ -48,6 +48,10 @@ func concat(left, right int) int {
 }
 
 func operate2(target, curr int, operands []int) bool {
+	if curr > target {
+		return false
+	}
+
 	if len(operands) == 0 {
 		return target == curr
 	}
