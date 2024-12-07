@@ -34,3 +34,11 @@ func MustSplitIntsSep(in, sep string) []int {
 
 	return out
 }
+
+func MustAtoi(in string) int {
+	v, err := strconv.Atoi(in)
+	if err != nil {
+		panic(err)
+	}
+	return v
+}
