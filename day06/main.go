@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/hashicorp/go-set/v3"
+	"slices"
 	"sknoslo/aoc2024/utils"
 	"sknoslo/aoc2024/vec2"
 	"strings"
+
+	"github.com/hashicorp/go-set/v3"
 )
 
 var input string
@@ -70,7 +72,7 @@ type Memory struct {
 }
 
 func detectLoop(pos, dir vec2.Vec2, grid map[vec2.Vec2]rune) bool {
-	seen := set.New[Memory](100)
+	seen := make([][4]bool, w*h)
 
 	key := pos.Add(dir)
 	grid[key] = 'O'
@@ -79,10 +81,11 @@ func detectLoop(pos, dir vec2.Vec2, grid map[vec2.Vec2]rune) bool {
 	}()
 
 	for _, ok := grid[pos]; ok; {
-		if seen.Contains(Memory{pos, dir}) {
+		di := slices.Index(vec2.CardinalDirs, dir)
+		if seen[pos.Y * w + pos.X][di] {
 			return true
 		}
-		seen.Insert(Memory{pos, dir})
+		seen[pos.Y * w + pos.X][di] = true
 		n := pos.Add(dir)
 		if tile, ok := grid[n]; ok {
 			if tile != '.' {
@@ -101,20 +104,19 @@ func detectLoop(pos, dir vec2.Vec2, grid map[vec2.Vec2]rune) bool {
 func parttwo() string {
 	grid, pos := parseInput()
 	dir := vec2.North
-	seen := set.New[vec2.Vec2](100)
+	seen := make([]bool, w * h)
 
 	loops := 0
 
 	for _, ok := grid[pos]; ok; {
-		seen.Insert(pos)
+		seen[pos.Y * w + pos.X] = true
 		n := pos.Add(dir)
 		if tile, ok := grid[n]; ok {
 			if tile != '.' {
 				dir = dir.RotateCardinalCW()
 			} else {
-				// TODO: perf improvement: don't need to detect loop if we've already been to
-				// this spot but in the clockwise direction
-				if !seen.Contains(pos.Add(dir)) && detectLoop(pos, dir, grid) {
+				next := pos.Add(dir)
+				if !seen[next.Y * w + next.X] && detectLoop(pos, dir, grid) {
 					loops++
 				}
 				pos = pos.Add(dir)
