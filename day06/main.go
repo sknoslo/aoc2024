@@ -23,7 +23,7 @@ func main() {
 	utils.Run(2, parttwo)
 }
 
-func parseInput() (map[vec2.Vec2]rune, vec2.Vec2) {
+func parseInput() (map[vec2.Vec2]rune, vec2.Vec2, string) {
 	lines := strings.Split(strings.TrimSpace(input), "\n")
 	w, h = len(lines[0]), len(lines)
 	grid := make(map[vec2.Vec2]rune, w*h)
@@ -41,11 +41,14 @@ func parseInput() (map[vec2.Vec2]rune, vec2.Vec2) {
 		}
 	}
 
-	return grid, start
+	strgrid := strings.Join(lines, "")
+	strgrid = strings.Replace(strgrid, "^", ".", 1)
+
+	return grid, start, strgrid
 }
 
 func partone() string {
-	grid, pos := parseInput()
+	grid, pos, _ := parseInput()
 	dir := vec2.North
 	seen := set.New[vec2.Vec2](100)
 
@@ -66,29 +69,27 @@ func partone() string {
 	return fmt.Sprint(seen.Size())
 }
 
-type Memory struct {
-	pos vec2.Vec2
-	dir vec2.Vec2
-}
 
-func detectLoop(pos, dir vec2.Vec2, grid map[vec2.Vec2]rune) bool {
-	seen := make([][4]bool, w*h)
+var dlseen [][4]bool
+func detectLoop(pos, dir vec2.Vec2, grid string) bool {
+	if len(dlseen) == 0 {
+		dlseen = make([][4]bool, w*h)
+	} else {
+		clear(dlseen)
+	}
 
-	key := pos.Add(dir)
-	grid[key] = 'O'
-	defer func() {
-		grid[key] = '.'
-	}()
+	barrier := pos.Add(dir)
 
-	for _, ok := grid[pos]; ok; {
+	for pos.InRange(0, 0, w-1, h-1) {
 		di := slices.Index(vec2.CardinalDirs, dir)
-		if seen[pos.Y * w + pos.X][di] {
+		if dlseen[pos.Y * w + pos.X][di] {
 			return true
 		}
-		seen[pos.Y * w + pos.X][di] = true
+		dlseen[pos.Y * w + pos.X][di] = true
 		n := pos.Add(dir)
-		if tile, ok := grid[n]; ok {
-			if tile != '.' {
+		if n.InRange(0, 0, w-1, h-1) {
+			tile := grid[n.Y * w + n.X]
+			if tile != '.' || n == barrier {
 				dir = dir.RotateCardinalCW()
 			} else {
 				pos = pos.Add(dir)
@@ -102,16 +103,17 @@ func detectLoop(pos, dir vec2.Vec2, grid map[vec2.Vec2]rune) bool {
 }
 
 func parttwo() string {
-	grid, pos := parseInput()
+	_, pos, grid := parseInput()
 	dir := vec2.North
 	seen := make([]bool, w * h)
 
 	loops := 0
 
-	for _, ok := grid[pos]; ok; {
+	for pos.InRange(0, 0, w-1, h-1) {
 		seen[pos.Y * w + pos.X] = true
 		n := pos.Add(dir)
-		if tile, ok := grid[n]; ok {
+		if n.InRange(0, 0, w-1, h-1) {
+			tile := grid[n.Y * w + n.X]
 			if tile != '.' {
 				dir = dir.RotateCardinalCW()
 			} else {
