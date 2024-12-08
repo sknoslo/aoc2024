@@ -44,7 +44,7 @@ func partone() string {
 				for _, dir := range dirs {
 					for i, l := range "MAS" {
 						pos := vec2.New(x, y).Add(dir.Mul(i + 1))
-						if !pos.InRange(0, w-1, 0, h-1) || rows[pos.Y][pos.X] != byte(l) {
+						if !pos.InRange(0, 0, w-1, h-1) || rows[pos.Y][pos.X] != byte(l) {
 							continue dirloop
 						}
 					}

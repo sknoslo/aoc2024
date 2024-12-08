@@ -7,3 +7,12 @@ func AbsDiff(a, b int) int {
 
 	return b - a
 }
+
+func Gcd(a, b int) int {
+	for b != 0 {
+		t := b
+		b = a % b
+		a = t
+	}
+	return a
+}
