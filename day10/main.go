@@ -4,18 +4,13 @@ import (
 	"fmt"
 	"sknoslo/aoc2024/utils"
 	"sknoslo/aoc2024/vec2"
+	"sknoslo/aoc2024/grid"
 	"strings"
 
 	"github.com/hashicorp/go-set/v3"
 )
 
 var input string
-
-type Grid struct {
-	cells []int
-	w int
-	h int
-}
 
 func init() {
 	input = utils.MustReadInput("input.txt")
@@ -27,30 +22,13 @@ func main() {
 	utils.Run(2, parttwo)
 }
 
-func parseInput() Grid {
-	var grid Grid
-
-	lines := strings.Split(input, "\n")
-	grid.h = len(lines)
-	grid.w = len(lines[0])
-
-	grid.cells = make([]int, grid.h * grid.w)
-
-	for y, line := range lines {
-		for x, v := range line {
-			grid.cells[y * grid.w + x] = int(v - '0')
-		}
-	}
-
-	return grid
-}
-
-func trailScore1(grid Grid, curr, i int, found *set.Set[int]) int {
-	if grid.cells[i] - curr != 1 {
+func trailScore1(grid *grid.Grid[int], curr int, i vec2.Vec2, found *set.Set[vec2.Vec2]) int {
+	v := grid.CellAt(i)
+	if v - curr != 1 {
 		return 0
 	}
 
-	if grid.cells[i] == 9 {
+	if v == 9 {
 		if found.Contains(i) {
 			return 0
 		}
@@ -59,12 +37,10 @@ func trailScore1(grid Grid, curr, i int, found *set.Set[int]) int {
 	}
 
 	score := 0
-	pos := vec2.New(i % grid.w, i / grid.w)
 	for _, dir := range vec2.CardinalDirs {
-		n := pos.Add(dir)
-		if n.InRange(0, 0, grid.w-1, grid.h-1) {
-			ni := n.Y * grid.w + n.X
-			score += trailScore1(grid, grid.cells[i], ni, found)
+		n := i.Add(dir)
+		if grid.InGrid(n) {
+			score += trailScore1(grid, v, n, found)
 		}
 	}
 
@@ -72,36 +48,35 @@ func trailScore1(grid Grid, curr, i int, found *set.Set[int]) int {
 }
 
 func partone() string {
-	grid := parseInput()
+	grid := grid.MustFromDigits(input)
 
 	sum := 0
 
-	for i, v := range grid.cells {
+	for i, v := range grid.Cells() {
 		if v == 0 {
-			sum += trailScore1(grid, -1, i, set.New[int](4))
+			sum += trailScore1(grid, -1, i, set.New[vec2.Vec2](4))
 		}
 	}
 
 	return fmt.Sprint(sum)
 }
 
-func trailScore2(grid Grid, curr, i int) int {
-	if grid.cells[i] - curr != 1 {
+func trailScore2(grid *grid.Grid[int], curr int, i vec2.Vec2) int {
+	v := grid.CellAt(i)
+	if v - curr != 1 {
 		return 0
 	}
 
-	if grid.cells[i] == 9 {
+	if v == 9 {
 		return 1
 	}
 
 
 	score := 0
-	pos := vec2.New(i % grid.w, i / grid.w)
 	for _, dir := range vec2.CardinalDirs {
-		n := pos.Add(dir)
-		if n.InRange(0, 0, grid.w-1, grid.h-1) {
-			ni := n.Y * grid.w + n.X
-			score += trailScore2(grid, grid.cells[i], ni)
+		n := i.Add(dir)
+		if grid.InGrid(n) {
+			score += trailScore2(grid, v, n)
 		}
 	}
 
@@ -109,11 +84,11 @@ func trailScore2(grid Grid, curr, i int) int {
 }
 
 func parttwo() string {
-	grid := parseInput()
+	grid := grid.MustFromDigits(input)
 
 	sum := 0
 
-	for i, v := range grid.cells {
+	for i, v := range grid.Cells() {
 		if v == 0 {
 			sum += trailScore2(grid, -1, i)
 		}
