@@ -2,6 +2,7 @@ package utils
 
 import (
 	"os"
+	"strings"
 )
 
 func ReadInput(path string) (string, error) {
@@ -10,7 +11,7 @@ func ReadInput(path string) (string, error) {
 		return "", err
 	}
 
-	return string(bytes), nil
+	return strings.TrimSpace(string(bytes)), nil
 }
 
 func MustReadInput(path string) string {
@@ -19,5 +20,5 @@ func MustReadInput(path string) string {
 		panic(err)
 	}
 
-	return string(bytes)
+	return strings.TrimSpace(string(bytes))
 }
