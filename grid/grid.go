@@ -1,6 +1,7 @@
 package grid
 
 import (
+	"fmt"
 	"iter"
 	"sknoslo/aoc2024/utils"
 	"sknoslo/aoc2024/vec2"
@@ -50,6 +51,11 @@ func (grid *Grid[T]) CellAtXY(x, y int) T {
 	return grid.cells[i]
 }
 
+func (grid *Grid[T]) SetCellAt(v vec2.Vec2, t T) {
+	i := v.Y * grid.w + v.X
+	grid.cells[i] = t
+}
+
 func (grid *Grid[T]) InGrid(v vec2.Vec2) bool {
 	return v.InRange(0, 0, grid.w-1, grid.h-1)
 }
@@ -72,6 +78,48 @@ func (grid *Grid[T]) Points() iter.Seq[vec2.Vec2] {
 			}
 		}
 	}
+}
+
+func (grid *Grid[T]) String() string {
+	var b strings.Builder
+
+	for s, v := range grid.Cells() {
+		fmt.Fprint(&b, v)
+		if s.X == grid.w - 1 {
+			fmt.Fprintln(&b)
+		}
+	}
+
+	return b.String()
+}
+
+func (grid *Grid[T]) Stringf(f string) string {
+	var b strings.Builder
+
+	for s, v := range grid.Cells() {
+		fmt.Fprintf(&b, f, v)
+		if s.X == grid.w - 1 {
+			fmt.Fprintln(&b)
+		}
+	}
+
+	return b.String()
+}
+
+func (grid *Grid[T]) StringOverlayf(f string, overlay T, at vec2.Vec2) string {
+	var b strings.Builder
+
+	for s, v := range grid.Cells() {
+		if s == at {
+			v = overlay
+		}
+		fmt.Fprintf(&b, f, v)
+		if s.X == grid.w - 1 {
+			fmt.Fprintln(&b)
+		}
+	}
+
+	return b.String()
 }
 
 func (grid *Grid[T]) indexToVec2(i int) vec2.Vec2 {
