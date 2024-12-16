@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-type Grid[T any] struct {
+type Grid[T comparable] struct {
 	w, h int
 	cells []T
 }
@@ -37,7 +37,7 @@ func FromRunes(in string) *Grid[rune] {
 	return New(w, h, cells)
 }
 
-func New[T any](w, h int, cells []T) *Grid[T] {
+func New[T comparable](w, h int, cells []T) *Grid[T] {
 	return &Grid[T]{w, h, cells}
 }
 
@@ -58,6 +58,15 @@ func (grid *Grid[T]) SetCellAt(v vec2.Vec2, t T) {
 
 func (grid *Grid[T]) InGrid(v vec2.Vec2) bool {
 	return v.InRange(0, 0, grid.w-1, grid.h-1)
+}
+
+func (grid *Grid[T]) Find(item T) vec2.Vec2 {
+	for i, v := range grid.cells {
+		if v == item {
+			return grid.indexToVec2(i)
+		}
+    }
+	return vec2.New(0, 0)
 }
 
 func (grid *Grid[T]) Cells() iter.Seq2[vec2.Vec2, T] {
@@ -111,6 +120,22 @@ func (grid *Grid[T]) StringOverlayf(f string, overlay T, at vec2.Vec2) string {
 
 	for s, v := range grid.Cells() {
 		if s == at {
+			v = overlay
+		}
+		fmt.Fprintf(&b, f, v)
+		if s.X == grid.w - 1 {
+			fmt.Fprintln(&b)
+		}
+	}
+
+	return b.String()
+}
+
+func (grid *Grid[T]) StringOverlayMapf(f string, overlay T, m map[vec2.Vec2]int) string {
+	var b strings.Builder
+
+	for s, v := range grid.Cells() {
+		if _, ok := m[s]; ok {
 			v = overlay
 		}
 		fmt.Fprintf(&b, f, v)
