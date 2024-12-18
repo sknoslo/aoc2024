@@ -49,6 +49,10 @@ func New[T comparable](w, h int, cells []T) *Grid[T] {
 	return &Grid[T]{w, h, cells}
 }
 
+func (grid *Grid[T]) Size() vec2.Vec2 {
+	return vec2.New(grid.w, grid.h)
+}
+
 func (grid *Grid[T]) CellAt(v vec2.Vec2) T {
 	i := v.Y * grid.w + v.X
 	return grid.cells[i]
