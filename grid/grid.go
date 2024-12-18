@@ -37,6 +37,14 @@ func FromRunes(in string) *Grid[rune] {
 	return New(w, h, cells)
 }
 
+func FromSize[T comparable](w, h int, def T) *Grid[T] {
+	cells := make([]T, w * h)
+	for i := 0; i < w * h; i++ {
+		cells[i] = def
+	}
+	return New(w, h, cells)
+}
+
 func New[T comparable](w, h int, cells []T) *Grid[T] {
 	return &Grid[T]{w, h, cells}
 }
