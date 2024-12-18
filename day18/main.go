@@ -76,45 +76,57 @@ func partone() string {
 	return "no solution"
 }
 
-func parttwo() string {
+func hasPath(bytes []vec2.Vec2, sim int) bool {
 	size := 70
-	sim := 1024
 	end := vec2.New(size, size)
-	bytes := parseInput()
 	g := grid.FromSize(end.X+1, end.Y+1, '.')
-
-mainloop:
-	for i := range bytes {
+	for i := range sim {
 		g.SetCellAt(bytes[i], '#')
-		// jump the first sim bytes since we know they don't obstruct the path
-		if i < sim {
-			continue
+		continue
+	}
+
+	q := algo.NewDeque[step](71 * 71)
+	s := grid.FromSize(end.X+1, end.Y+1, false)
+
+	q.PushFront(step{vec2.New(0, 0), 0})
+
+	for !q.Empty() {
+		x := q.PopBack()
+
+		if x.p == end {
+			return true
 		}
 
-		q := algo.NewDeque[step](71 * 71)
-		s := grid.FromSize(end.X+1, end.Y+1, false)
+		if s.CellAt(x.p) {
+			continue
+		}
+		s.SetCellAt(x.p, true)
 
-		q.PushFront(step{vec2.New(0, 0), 0})
-
-		for !q.Empty() {
-			x := q.PopBack()
-
-			if x.p == end {
-				continue mainloop
-			}
-
-			if !g.InGrid(x.p) || g.CellAt(x.p) == '#' || s.CellAt(x.p) {
-				continue
-			}
-			s.SetCellAt(x.p, true)
-
-			for _, dir := range vec2.CardinalDirs {
+		for _, dir := range vec2.CardinalDirs {
+			n := x.p.Add(dir)
+			if g.InGrid(n) && g.CellAt(n) != '#' {
 				q.PushFront(step{x.p.Add(dir), x.d + 1})
 			}
 		}
-
-		return fmt.Sprintf("%d,%d", bytes[i].X, bytes[i].Y)
 	}
 
-	return "no solution"
+	return false
+}
+
+func parttwo() string {
+	bytes := parseInput()
+
+	start := 0
+	end := len(bytes)
+	for end != start+1 {
+		middle := (end - start) / 2 + start
+		fmt.Println(start, middle, end)
+		if hasPath(bytes, middle) {
+			start = middle
+		} else {
+			end = middle
+		}
+	}
+
+	return fmt.Sprintf("%d,%d", bytes[start].X, bytes[start].Y)
 }
