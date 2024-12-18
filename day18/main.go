@@ -92,7 +92,7 @@ mainloop:
 		}
 
 		q := algo.NewDeque[step](71 * 71)
-		s := set.New[vec2.Vec2](71 * 71)
+		s := grid.FromSize(end.X+1, end.Y+1, false)
 
 		q.PushFront(step{vec2.New(0, 0), 0})
 
@@ -103,10 +103,10 @@ mainloop:
 				continue mainloop
 			}
 
-			if !g.InGrid(x.p) || g.CellAt(x.p) == '#' || s.Contains(x.p) {
+			if !g.InGrid(x.p) || g.CellAt(x.p) == '#' || s.CellAt(x.p) {
 				continue
 			}
-			s.Insert(x.p)
+			s.SetCellAt(x.p, true)
 
 			for _, dir := range vec2.CardinalDirs {
 				q.PushFront(step{x.p.Add(dir), x.d + 1})
