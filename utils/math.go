@@ -16,3 +16,12 @@ func Gcd(a, b int) int {
 	}
 	return a
 }
+
+func Pow(a, b int) int {
+	res := 1
+	for range b {
+		res *= a
+	}
+
+	return res
+}
