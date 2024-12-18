@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sknoslo/aoc2024/utils"
 	"sknoslo/aoc2024/vec2"
-	"sknoslo/aoc2024/grid"
+	"sknoslo/aoc2024/grids"
 	"strings"
 
 	"github.com/hashicorp/go-set/v3"
@@ -22,7 +22,7 @@ func main() {
 	utils.Run(2, parttwo)
 }
 
-func trailScore1(grid *grid.Grid[int], curr int, i vec2.Vec2, found *set.Set[vec2.Vec2]) int {
+func trailScore1(grid *grids.Grid[int], curr int, i vec2.Vec2, found *set.Set[vec2.Vec2]) int {
 	v := grid.CellAt(i)
 	if v - curr != 1 {
 		return 0
@@ -48,7 +48,7 @@ func trailScore1(grid *grid.Grid[int], curr int, i vec2.Vec2, found *set.Set[vec
 }
 
 func partone() string {
-	grid := grid.MustFromDigits(input)
+	grid := grids.MustFromDigits(input)
 
 	sum := 0
 
@@ -61,7 +61,7 @@ func partone() string {
 	return fmt.Sprint(sum)
 }
 
-func trailScore2(grid *grid.Grid[int], curr int, i vec2.Vec2) int {
+func trailScore2(grid *grids.Grid[int], curr int, i vec2.Vec2) int {
 	v := grid.CellAt(i)
 	if v - curr != 1 {
 		return 0
@@ -84,7 +84,7 @@ func trailScore2(grid *grid.Grid[int], curr int, i vec2.Vec2) int {
 }
 
 func parttwo() string {
-	grid := grid.MustFromDigits(input)
+	grid := grids.MustFromDigits(input)
 
 	sum := 0
 

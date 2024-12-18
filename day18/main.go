@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"sknoslo/aoc2024/algo"
-	"sknoslo/aoc2024/grid"
+	"sknoslo/aoc2024/grids"
 	"sknoslo/aoc2024/utils"
 	"sknoslo/aoc2024/vec2"
 	"strconv"
@@ -45,7 +45,7 @@ func partone() string {
 	sim := 1024
 	end := vec2.New(size, size)
 	bytes := parseInput()
-	g := grid.FromSize(end.X+1, end.Y+1, '.')
+	g := grids.FromSize(end.X+1, end.Y+1, '.')
 
 	for i := range sim {
 		g.SetCellAt(bytes[i], '#')
@@ -79,14 +79,14 @@ func partone() string {
 func hasPath(bytes []vec2.Vec2, sim int) bool {
 	size := 70
 	end := vec2.New(size, size)
-	g := grid.FromSize(end.X+1, end.Y+1, '.')
+	g := grids.FromSize(end.X+1, end.Y+1, '.')
 	for i := range sim {
 		g.SetCellAt(bytes[i], '#')
 		continue
 	}
 
 	q := algo.NewDeque[step](71 * 71)
-	s := grid.FromSize(end.X+1, end.Y+1, false)
+	s := grids.FromSize(end.X+1, end.Y+1, false)
 
 	q.PushFront(step{vec2.New(0, 0), 0})
 

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"sknoslo/aoc2024/algo"
-	"sknoslo/aoc2024/grid"
+	"sknoslo/aoc2024/grids"
 	"sknoslo/aoc2024/utils"
 	"sknoslo/aoc2024/vec2"
 
@@ -22,7 +22,7 @@ func main() {
 }
 
 func partone() string {
-	grid := grid.FromRunes(input)
+	grid := grids.FromRunes(input)
 	sum := 0
 	seen := set.New[vec2.Vec2](64)
 	toVisit := algo.NewStack[vec2.Vec2](64)
@@ -124,7 +124,7 @@ func countSides(region *set.Set[vec2.Vec2]) int {
 }
 
 func parttwo() string {
-	grid := grid.FromRunes(input)
+	grid := grids.FromRunes(input)
 	sum := 0
 	seen := set.New[vec2.Vec2](64)
 	toVisit := algo.NewStack[vec2.Vec2](64)

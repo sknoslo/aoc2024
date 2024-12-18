@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"sknoslo/aoc2024/grid"
+	"sknoslo/aoc2024/grids"
 	"sknoslo/aoc2024/utils"
 	"sknoslo/aoc2024/vec2"
 	"strings"
@@ -22,7 +22,7 @@ func main() {
 
 func partone() string {
 	parts := strings.Split(input, "\n\n")
-	grid := grid.FromRunes(parts[0])
+	grid := grids.FromRunes(parts[0])
 	moves := strings.Join(strings.Split(parts[1], "\n"), "")
 	var pos vec2.Vec2
 
@@ -77,7 +77,7 @@ func partone() string {
 	return fmt.Sprint(sum)
 }
 
-func doubleGrid(in string) (*grid.Grid[rune], vec2.Vec2) {
+func doubleGrid(in string) (*grids.Grid[rune], vec2.Vec2) {
 	lines := strings.Split(in, "\n")
 	w, h := len(lines[0])*2, len(lines)
 	cells := make([]rune, w*h)
@@ -97,10 +97,10 @@ func doubleGrid(in string) (*grid.Grid[rune], vec2.Vec2) {
 		cells[i*2+1] = v
 	}
 
-	return grid.New(w, h, cells), pos
+	return grids.New(w, h, cells), pos
 }
 
-func canPush(g *grid.Grid[rune], pos, dir vec2.Vec2) bool {
+func canPush(g *grids.Grid[rune], pos, dir vec2.Vec2) bool {
 	n := pos.Add(dir)
 
 	switch g.CellAt(n) {
@@ -115,7 +115,7 @@ func canPush(g *grid.Grid[rune], pos, dir vec2.Vec2) bool {
 	return false
 }
 
-func pushUpDown(g *grid.Grid[rune], pos, dir vec2.Vec2) {
+func pushUpDown(g *grids.Grid[rune], pos, dir vec2.Vec2) {
 	n := pos.Add(dir)
 
 	switch g.CellAt(n) {
@@ -138,7 +138,7 @@ func pushUpDown(g *grid.Grid[rune], pos, dir vec2.Vec2) {
 	}
 }
 
-func pushLeftRight(g *grid.Grid[rune], pos, dir vec2.Vec2) bool {
+func pushLeftRight(g *grids.Grid[rune], pos, dir vec2.Vec2) bool {
 	n := pos.Add(dir)
 	t := g.CellAt(n)
 	if t == '#' {
