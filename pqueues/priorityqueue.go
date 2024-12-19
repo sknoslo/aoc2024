@@ -1,4 +1,4 @@
-package algo
+package pqueues
 
 import (
 	"container/heap"
@@ -47,7 +47,7 @@ type PriorityQueue[T any] struct {
 	data priorityQueueData[T]
 }
 
-func NewPriorityQueue[T any](size int) *PriorityQueue[T] {
+func New[T any](size int) *PriorityQueue[T] {
 	pq := new(PriorityQueue[T])
 	pq.data = make(priorityQueueData[T], 0, size)
 

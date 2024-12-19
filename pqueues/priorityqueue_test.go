@@ -1,11 +1,11 @@
-package algo
+package pqueues
 
 import (
 	"testing"
 )
 
 func TestPriorityQueue(t *testing.T) {
-	pq := NewPriorityQueue[rune](3)
+	pq := New[rune](3)
 
 	pq.Push('C', 3)
 	pq.Push('D', 4)

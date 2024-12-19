@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"sknoslo/aoc2024/algo"
+	"sknoslo/aoc2024/pqueues"
 	"sknoslo/aoc2024/grids"
 	"sknoslo/aoc2024/utils"
 	"sknoslo/aoc2024/vec2"
@@ -39,7 +39,7 @@ type memory struct {
 
 func partone() string {
 	g := grids.FromRunes(input)
-	q := algo.NewPriorityQueue[step](1024)
+	q := pqueues.New[step](1024)
 	s := set.New[memory](1024)
 	q.Push(step{ g.Find('S'), vec2.East, 0 }, 0)
 
@@ -71,7 +71,7 @@ func partone() string {
 
 func parttwo() string {
 	g := grids.FromRunes(input)
-	q := algo.NewPriorityQueue[step2](1024)
+	q := pqueues.New[step2](1024)
 	s := make(map[memory]int, 1024)
 	q.Push(step2{ g.Find('S'), vec2.East, 0, make([]vec2.Vec2, 0, 1024) }, 0)
 	b := -1

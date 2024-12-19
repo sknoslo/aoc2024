@@ -1,11 +1,11 @@
-package algo
+package stacks
 
 type Stack[T any] struct {
 	data []T
 	end int
 }
 
-func NewStack[T any](size int) *Stack[T] {
+func New[T any](size int) *Stack[T] {
 	s := new(Stack[T])
 	s.data = make([]T, size)
 	s.end = -1

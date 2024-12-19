@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"sknoslo/aoc2024/algo"
+	"sknoslo/aoc2024/stacks"
 	"sknoslo/aoc2024/grids"
 	"sknoslo/aoc2024/utils"
 	"sknoslo/aoc2024/vec2"
@@ -25,7 +25,7 @@ func partone() string {
 	grid := grids.FromRunes(input)
 	sum := 0
 	seen := set.New[vec2.Vec2](64)
-	toVisit := algo.NewStack[vec2.Vec2](64)
+	toVisit := stacks.New[vec2.Vec2](64)
 
 	for start, plant := range grid.Cells() {
 		if seen.Contains(start) {
@@ -127,7 +127,7 @@ func parttwo() string {
 	grid := grids.FromRunes(input)
 	sum := 0
 	seen := set.New[vec2.Vec2](64)
-	toVisit := algo.NewStack[vec2.Vec2](64)
+	toVisit := stacks.New[vec2.Vec2](64)
 
 	for start, plant := range grid.Cells() {
 		if seen.Contains(start) {
