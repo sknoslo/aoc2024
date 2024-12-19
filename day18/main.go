@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"sknoslo/aoc2024/algo"
+	"sknoslo/aoc2024/deques"
 	"sknoslo/aoc2024/grids"
 	"sknoslo/aoc2024/utils"
 	"sknoslo/aoc2024/vec2"
@@ -51,7 +51,7 @@ func partone() string {
 		g.SetCellAt(bytes[i], '#')
 	}
 
-	q := algo.NewDeque[step](71 * 71)
+	q := deques.New[step](71 * 71)
 	s := set.New[vec2.Vec2](71 * 71)
 
 	q.PushFront(step{vec2.New(0, 0), 0})
@@ -85,7 +85,7 @@ func hasPath(bytes []vec2.Vec2, sim int) bool {
 		continue
 	}
 
-	q := algo.NewDeque[step](71 * 71)
+	q := deques.New[step](71 * 71)
 	s := grids.FromSize(end.X+1, end.Y+1, false)
 
 	q.PushFront(step{vec2.New(0, 0), 0})
@@ -120,7 +120,6 @@ func parttwo() string {
 	end := len(bytes)
 	for end != start+1 {
 		middle := (end - start) / 2 + start
-		fmt.Println(start, middle, end)
 		if hasPath(bytes, middle) {
 			start = middle
 		} else {
