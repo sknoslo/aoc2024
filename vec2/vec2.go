@@ -1,6 +1,9 @@
 package vec2
 
-import "slices"
+import (
+	"sknoslo/aoc2024/utils"
+	"slices"
+)
 
 type Vec2 struct {
 	X, Y int
@@ -34,6 +37,10 @@ func (v Vec2) Mul(s int) Vec2 {
 
 func (v Vec2) Div(s int) Vec2 {
 	return Vec2{v.X / s, v.Y / s}
+}
+
+func Distance(a, b Vec2) int {
+	return utils.AbsDiff(a.X, b.X) + utils.AbsDiff(a.Y, b.Y)
 }
 
 func (v Vec2) RotateCardinalCW() Vec2 {

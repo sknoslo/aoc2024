@@ -9,14 +9,14 @@ import (
 )
 
 type Grid[T comparable] struct {
-	w, h int
+	w, h  int
 	cells []T
 }
 
 func MustFromDigits(in string) *Grid[int] {
 	lines := strings.Split(in, "\n")
 	w, h := len(lines[0]), len(lines)
-	cells := make([]int, w * h)
+	cells := make([]int, w*h)
 
 	for i, v := range strings.Join(lines, "") {
 		cells[i] = utils.MustAtoi(string(v))
@@ -28,7 +28,7 @@ func MustFromDigits(in string) *Grid[int] {
 func FromRunes(in string) *Grid[rune] {
 	lines := strings.Split(in, "\n")
 	w, h := len(lines[0]), len(lines)
-	cells := make([]rune, w * h)
+	cells := make([]rune, w*h)
 
 	for i, v := range strings.Join(lines, "") {
 		cells[i] = v
@@ -38,8 +38,8 @@ func FromRunes(in string) *Grid[rune] {
 }
 
 func FromSize[T comparable](w, h int, def T) *Grid[T] {
-	cells := make([]T, w * h)
-	for i := 0; i < w * h; i++ {
+	cells := make([]T, w*h)
+	for i := 0; i < w*h; i++ {
 		cells[i] = def
 	}
 	return New(w, h, cells)
@@ -54,17 +54,17 @@ func (grid *Grid[T]) Size() vec2.Vec2 {
 }
 
 func (grid *Grid[T]) CellAt(v vec2.Vec2) T {
-	i := v.Y * grid.w + v.X
+	i := v.Y*grid.w + v.X
 	return grid.cells[i]
 }
 
 func (grid *Grid[T]) CellAtXY(x, y int) T {
-	i := y * grid.w + x
+	i := y*grid.w + x
 	return grid.cells[i]
 }
 
 func (grid *Grid[T]) SetCellAt(v vec2.Vec2, t T) {
-	i := v.Y * grid.w + v.X
+	i := v.Y*grid.w + v.X
 	grid.cells[i] = t
 }
 
@@ -77,7 +77,7 @@ func (grid *Grid[T]) Find(item T) vec2.Vec2 {
 		if v == item {
 			return grid.indexToVec2(i)
 		}
-    }
+	}
 	return vec2.New(0, 0)
 }
 
@@ -106,7 +106,7 @@ func (grid *Grid[T]) String() string {
 
 	for s, v := range grid.Cells() {
 		fmt.Fprint(&b, v)
-		if s.X == grid.w - 1 {
+		if s.X == grid.w-1 {
 			fmt.Fprintln(&b)
 		}
 	}
@@ -119,7 +119,7 @@ func (grid *Grid[T]) Stringf(f string) string {
 
 	for s, v := range grid.Cells() {
 		fmt.Fprintf(&b, f, v)
-		if s.X == grid.w - 1 {
+		if s.X == grid.w-1 {
 			fmt.Fprintln(&b)
 		}
 	}
@@ -135,7 +135,7 @@ func (grid *Grid[T]) StringOverlayf(f string, overlay T, at vec2.Vec2) string {
 			v = overlay
 		}
 		fmt.Fprintf(&b, f, v)
-		if s.X == grid.w - 1 {
+		if s.X == grid.w-1 {
 			fmt.Fprintln(&b)
 		}
 	}
@@ -151,7 +151,7 @@ func (grid *Grid[T]) StringOverlayMapf(f string, overlay T, m map[vec2.Vec2]int)
 			v = overlay
 		}
 		fmt.Fprintf(&b, f, v)
-		if s.X == grid.w - 1 {
+		if s.X == grid.w-1 {
 			fmt.Fprintln(&b)
 		}
 	}
@@ -160,5 +160,5 @@ func (grid *Grid[T]) StringOverlayMapf(f string, overlay T, m map[vec2.Vec2]int)
 }
 
 func (grid *Grid[T]) indexToVec2(i int) vec2.Vec2 {
-	return vec2.New(i % grid.w, i / grid.w)
+	return vec2.New(i%grid.w, i/grid.w)
 }
