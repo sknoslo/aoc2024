@@ -8,6 +8,14 @@ func AbsDiff(a, b int) int {
 	return b - a
 }
 
+func Abs(a int) int {
+	if a > 0 {
+		return a
+	}
+
+	return -a
+}
+
 func Gcd(a, b int) int {
 	for b != 0 {
 		t := b

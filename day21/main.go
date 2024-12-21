@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"sknoslo/aoc2024/utils"
 	"sknoslo/aoc2024/vec2"
 	"strconv"
@@ -14,7 +13,7 @@ var keypad map[rune]vec2.Vec2
 var dpad map[rune]vec2.Vec2
 
 func init() {
-	input = utils.MustReadInput("example.txt")
+	input = utils.MustReadInput("input.txt")
 	keypad = make(map[rune]vec2.Vec2, 11)
 	keypad['7'] = vec2.New(0, 0)
 	keypad['8'] = vec2.New(1, 0)
@@ -45,26 +44,52 @@ func traverseKeypad(from, to rune) []rune {
 	a, b := keypad[from], keypad[to]
 	delta := b.Sub(a)
 	dist := vec2.Distance(a, b)
-	path := make([]rune, 0, dist + 1)
+	path := make([]rune, 0, dist+1)
 
-	horizontal := '<'
-	if delta.X > 0 {
-		horizontal = '>'
+	dx := delta.X
+	dy := delta.Y
+
+	if a.Y == 3 && b.X == 0 {
+		// going left first is normally better, but...
+		// when going left on bottom row, to left col
+		// go up first to avoid the gap
+		for range -dy {
+			path = append(path, '^')
+			dy++
+		}
 	}
 
-	if delta.Y < 0 {
-		for range -delta.Y {
+	if a.X == 0 && b.Y == 3 {
+		// going down first is normally better, but...
+		// when going down on left col, to bottom row
+		// go right first to avoid the gap
+		for range dx {
+			path = append(path, '>')
+			dx--
+		}
+	}
+
+	if dx < 0 {
+		for range -dx {
+			path = append(path, '<')
+		}
+	}
+
+	if dy > 0 {
+		for range dy {
+			path = append(path, 'v')
+		}
+	}
+
+	if dy < 0 {
+		for range -dy {
 			path = append(path, '^')
 		}
 	}
 
-	for range utils.Abs(delta.X) {
-		path = append(path, horizontal)
-	}
-
-	if delta.Y > 0 {
-		for range delta.Y {
-			path = append(path, 'v')
+	if dx > 0 {
+		for range dx {
+			path = append(path, '>')
 		}
 	}
 
@@ -72,29 +97,58 @@ func traverseKeypad(from, to rune) []rune {
 }
 
 func traverseDpad(from, to rune) []rune {
+	if from == 'A' && to == '<' {
+		return []rune{'v', '<', '<', 'A'}
+	}
 	a, b := dpad[from], dpad[to]
 	delta := b.Sub(a)
 	dist := vec2.Distance(a, b)
-	path := make([]rune, 0, dist + 1)
+	path := make([]rune, 0, dist+1)
 
-	horizontal := '<'
-	if delta.X > 0 {
-		horizontal = '>'
+	dx := delta.X
+	dy := delta.Y
+
+	if a.Y == 0 && b.X == 0 {
+		// going left first is normally better, but...
+		// when going left on top row, to left col
+		// go down first to avoid the gap
+		for range dy {
+			path = append(path, 'v')
+			dy--
+		}
 	}
 
-	if delta.Y > 0 {
-		for range delta.Y {
+	if a.X == 0 && b.Y == 0 {
+		// going up first is normally better, but...
+		// when going right on left col, to top row
+		// go right first to avoid the gap
+		for range dx {
+			path = append(path, '>')
+			dx--
+		}
+	}
+
+	if dx < 0 {
+		for range -dx {
+			path = append(path, '<')
+		}
+	}
+
+	if dy > 0 {
+		for range dy {
 			path = append(path, 'v')
 		}
 	}
 
-	for range utils.Abs(delta.X) {
-		path = append(path, horizontal)
+	if dy < 0 {
+		for range -dy {
+			path = append(path, '^')
+		}
 	}
 
-	if delta.Y < 0 {
-		for range -delta.Y {
-			path = append(path, '^')
+	if dx > 0 {
+		for range dx {
+			path = append(path, '>')
 		}
 	}
 
@@ -102,72 +156,84 @@ func traverseDpad(from, to rune) []rune {
 }
 
 func partone() string {
-	// To deal with gaps...
-	// when using keypad, going up and left, prioritize going up first
-	//                    going down and right, prioritize going right first
-	// when using d-pad, going down and left, prioritize going down first
-	//                   going up and right, prioritize going right first
-	// the shortest path should always be to go in straight lines, never zig or zag
-	// which means we just need the x,y dist from each key a to b and we can calculate a min path?
-
-	fmt.Println(string(traverseDpad('A', '<')))
-	fmt.Println(string(traverseDpad('<', 'A')))
-	fmt.Println()
-	fmt.Println(string(traverseDpad('A', '>')))
-	fmt.Println(string(traverseDpad('>', 'A')))
-	fmt.Println()
-	fmt.Println(string(traverseDpad('A', '^')))
-	fmt.Println(string(traverseDpad('^', 'A')))
-	fmt.Println()
-	fmt.Println(string(traverseDpad('A', 'v')))
-	fmt.Println(string(traverseDpad('v', 'A')))
-
 	sum := 0
 
 	for _, code := range strings.Split(input, "\n") {
 		curr := 'A'
-		robot1 := make([]rune, 0, 20)
+		robot := make([]rune, 0, 20)
 
 		for _, key := range code {
-			robot1 = append(robot1, traverseKeypad(curr, key)...)
+			robot = append(robot, traverseKeypad(curr, key)...)
 			curr = key
 		}
 
-		fmt.Println(code, string(robot1))
+		for range 2 {
+			nextRobot := make([]rune, 0, len(robot)*3)
 
-		robot2 := make([]rune, 0, len(robot1) * 3)
-
-		curr = 'A'
-		for _, key := range robot1 {
-			robot2 = append(robot2, traverseDpad(curr, key)...)
-			curr = key
+			curr = 'A'
+			for _, key := range robot {
+				nextRobot = append(nextRobot, traverseDpad(curr, key)...)
+				curr = key
+			}
+			robot = nextRobot
 		}
 
-		fmt.Println(code, string(robot2))
-
-		robot3 := make([]rune, 0, len(robot2) * 3)
-
-		curr = 'A'
-		for _, key := range robot2 {
-			robot3 = append(robot3, traverseDpad(curr, key)...)
-			curr = key
-		}
-
-		fmt.Println(code, string(robot3))
-
-		fmt.Println(len(robot3), "*", utils.MustAtoi(code[0:3]))
-		sum += utils.MustAtoi(code[0:3]) * len(robot3)
+		sum += utils.MustAtoi(code[0:3]) * len(robot)
 	}
 
 	return strconv.Itoa(sum)
 }
 
-func parttwo() string {
-	return "incomplete"
+type Memory struct {
+	robot    int
+	from, to rune
 }
 
-//                                         *
-// <v<A>>^AvA^A 3 <vA<AA>>^AAvA<^A>AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A
+var cache map[Memory]int = make(map[Memory]int, 1000)
 
-//                                        *
-// v<<A>>^AvA^A 3 v<<A>>^AAv<A<A>>^AAvAA<^A>Av<A>^AA<A>Av<A<A>>^AAAvA<^A>A
+func calculateLength(robot int, from, to rune) int {
+	if robot == 25 {
+		return len(traverseDpad(from, to))
+	}
+
+	memkey := Memory{robot, from, to}
+
+	if v, ok := cache[memkey]; ok {
+		return v
+	}
+
+	complexity := 0
+	curr := 'A'
+	for _, key := range traverseDpad(from, to) {
+		complexity += calculateLength(robot+1, curr, key)
+		curr = key
+	}
+
+	cache[memkey] = complexity
+
+	return complexity
+}
+
+func parttwo() string {
+	sum := 0
+
+	for _, code := range strings.Split(input, "\n") {
+		robot := make([]rune, 0, 20)
+		curr := 'A'
+		for _, key := range code {
+			robot = append(robot, traverseKeypad(curr, key)...)
+			curr = key
+		}
+
+		complexity := 0
+		curr = 'A'
+		for _, key := range robot {
+			complexity += calculateLength(1, curr, key)
+			curr = key
+		}
+
+		sum += utils.MustAtoi(code[0:3]) * complexity
+	}
+
+	return strconv.Itoa(sum)
+}
