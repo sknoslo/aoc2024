@@ -119,7 +119,7 @@ func parttwo() string {
 	start := 0
 	end := len(bytes)
 	for end != start+1 {
-		middle := (end - start) / 2 + start
+		middle := (end-start)/2 + start
 		if hasPath(bytes, middle) {
 			start = middle
 		} else {

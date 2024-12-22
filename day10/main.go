@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"sknoslo/aoc2024/grids"
 	"sknoslo/aoc2024/utils"
 	"sknoslo/aoc2024/vec2"
-	"sknoslo/aoc2024/grids"
 	"strings"
 
 	"github.com/hashicorp/go-set/v3"
@@ -24,7 +24,7 @@ func main() {
 
 func trailScore1(grid *grids.Grid[int], curr int, i vec2.Vec2, found *set.Set[vec2.Vec2]) int {
 	v := grid.CellAt(i)
-	if v - curr != 1 {
+	if v-curr != 1 {
 		return 0
 	}
 
@@ -63,14 +63,13 @@ func partone() string {
 
 func trailScore2(grid *grids.Grid[int], curr int, i vec2.Vec2) int {
 	v := grid.CellAt(i)
-	if v - curr != 1 {
+	if v-curr != 1 {
 		return 0
 	}
 
 	if v == 9 {
 		return 1
 	}
-
 
 	score := 0
 	for _, dir := range vec2.CardinalDirs {

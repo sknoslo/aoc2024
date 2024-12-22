@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"sknoslo/aoc2024/stacks"
 	"sknoslo/aoc2024/grids"
+	"sknoslo/aoc2024/stacks"
 	"sknoslo/aoc2024/utils"
 	"sknoslo/aoc2024/vec2"
 
@@ -102,7 +102,6 @@ func countSides(region *set.Set[vec2.Vec2]) int {
 
 		}
 	}
-
 
 	for x := mn.X; x <= mx.X; x++ {
 		on, left, right := false, false, false

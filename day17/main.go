@@ -125,7 +125,7 @@ mainloop:
 				case 4:
 					b = b ^ c
 				case 5:
-					out = append(out, combo(ip) % 8)
+					out = append(out, combo(ip)%8)
 					if len(out) > mlen {
 						for i := 1; i <= len(out); i++ {
 							if out[len(out)-i] != t[len(t)-i] {

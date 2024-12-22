@@ -2,7 +2,7 @@ package stacks
 
 type Stack[T any] struct {
 	data []T
-	end int
+	end  int
 }
 
 func New[T any](size int) *Stack[T] {
@@ -41,6 +41,6 @@ func (stack *Stack[T]) grow() {
 	}
 
 	tmp := stack.data
-	stack.data = make([]T, len(stack.data) * 2)
+	stack.data = make([]T, len(stack.data)*2)
 	copy(stack.data, tmp)
 }

@@ -1,13 +1,12 @@
 package deques
 
-
 /**
  * start points to front of queue
  * end points to end of queue + 1
  * if queue is empty start == end
  */
 type Deque[T any] struct {
-	data []T
+	data       []T
 	start, end int
 }
 
@@ -75,11 +74,11 @@ func (d *Deque[T]) Empty() bool {
 
 func (d *Deque[T]) grow() {
 	size := len(d.data)
-	if d.start == d.end + 1 || d.start == 0 && d.end == size {
-		data := make([]T, size * 2)
+	if d.start == d.end+1 || d.start == 0 && d.end == size {
+		data := make([]T, size*2)
 
 		s := d.start
-		d.start = size / 2 + 1 // start at a quarter
+		d.start = size/2 + 1 // start at a quarter
 		e := d.start
 		for s != d.end {
 			data[e] = d.data[s]

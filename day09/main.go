@@ -20,7 +20,7 @@ func main() {
 }
 
 func partone() string {
-	digits := strings.Split(input, "");
+	digits := strings.Split(input, "")
 
 	fs := make([]int, 0, len(input))
 
@@ -39,7 +39,7 @@ func partone() string {
 
 	cfs := make([]int, 0, len(fs))
 
-	s, e := 0, len(fs) - 1
+	s, e := 0, len(fs)-1
 	for s <= e {
 		if fs[s] != -1 {
 			cfs = append(cfs, fs[s])
@@ -61,7 +61,7 @@ func partone() string {
 }
 
 func parttwo() string {
-	digits := strings.Split(input, "");
+	digits := strings.Split(input, "")
 
 	fs := make([]int, 0, len(input))
 	free := make(map[int][]int, 9)
@@ -84,7 +84,6 @@ func parttwo() string {
 		id++
 	}
 
-
 	i := len(fs) - 1
 	for i > 0 {
 		id := fs[i]
@@ -93,7 +92,6 @@ func parttwo() string {
 			j--
 		}
 		size := i - j
-
 
 		firstspace := len(fs)
 		firstspacesize := 0
@@ -108,14 +106,14 @@ func parttwo() string {
 		if firstspace < i && firstspacesize > 0 {
 			pos := free[firstspacesize][0]
 			for k := range size {
-				fs[pos + k] = id
-				fs[j + k+1] = -1
+				fs[pos+k] = id
+				fs[j+k+1] = -1
 			}
 
 			free[firstspacesize] = free[firstspacesize][1:]
 			remainder := firstspacesize - size
 			if remainder > 0 {
-				free[remainder] = append(free[remainder], pos + size)
+				free[remainder] = append(free[remainder], pos+size)
 				slices.Sort(free[remainder])
 
 			}

@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"slices"
 	"sknoslo/aoc2024/utils"
 	"sknoslo/aoc2024/vec2"
+	"slices"
 	"strings"
 
 	"github.com/hashicorp/go-set/v3"
@@ -69,8 +69,8 @@ func partone() string {
 	return fmt.Sprint(seen.Size())
 }
 
-
 var dlseen [][4]bool
+
 func detectLoop(pos, dir vec2.Vec2, grid string) bool {
 	if len(dlseen) == 0 {
 		dlseen = make([][4]bool, w*h)
@@ -82,13 +82,13 @@ func detectLoop(pos, dir vec2.Vec2, grid string) bool {
 
 	for pos.InRange(0, 0, w-1, h-1) {
 		di := slices.Index(vec2.CardinalDirs, dir)
-		if dlseen[pos.Y * w + pos.X][di] {
+		if dlseen[pos.Y*w+pos.X][di] {
 			return true
 		}
-		dlseen[pos.Y * w + pos.X][di] = true
+		dlseen[pos.Y*w+pos.X][di] = true
 		n := pos.Add(dir)
 		if n.InRange(0, 0, w-1, h-1) {
-			tile := grid[n.Y * w + n.X]
+			tile := grid[n.Y*w+n.X]
 			if tile != '.' || n == barrier {
 				dir = dir.RotateCardinalCW()
 			} else {
@@ -105,20 +105,20 @@ func detectLoop(pos, dir vec2.Vec2, grid string) bool {
 func parttwo() string {
 	_, pos, grid := parseInput()
 	dir := vec2.North
-	seen := make([]bool, w * h)
+	seen := make([]bool, w*h)
 
 	loops := 0
 
 	for pos.InRange(0, 0, w-1, h-1) {
-		seen[pos.Y * w + pos.X] = true
+		seen[pos.Y*w+pos.X] = true
 		n := pos.Add(dir)
 		if n.InRange(0, 0, w-1, h-1) {
-			tile := grid[n.Y * w + n.X]
+			tile := grid[n.Y*w+n.X]
 			if tile != '.' {
 				dir = dir.RotateCardinalCW()
 			} else {
 				next := pos.Add(dir)
-				if !seen[next.Y * w + next.X] && detectLoop(pos, dir, grid) {
+				if !seen[next.Y*w+next.X] && detectLoop(pos, dir, grid) {
 					loops++
 				}
 				pos = pos.Add(dir)

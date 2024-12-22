@@ -41,10 +41,10 @@ func partone() string {
 
 func concat(left, right int) int {
 	pad := 10
-	for right / pad > 0 {
+	for right/pad > 0 {
 		pad *= 10
 	}
-	return left * pad + right
+	return left*pad + right
 }
 
 func operate2(target, curr int, operands []int) bool {

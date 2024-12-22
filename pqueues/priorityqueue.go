@@ -5,13 +5,12 @@ import (
 )
 
 type item[T any] struct {
-	value T
+	value    T
 	priority int
-	index int
+	index    int
 }
 
 type priorityQueueData[T any] []item[T]
-
 
 func (pq priorityQueueData[T]) Len() int {
 	return len(pq)
@@ -38,7 +37,7 @@ func (pq *priorityQueueData[T]) Pop() any {
 	old := *pq
 	n := len(old)
 	item := old[n-1]
-	*pq = old[0:n-1]
+	*pq = old[0 : n-1]
 
 	return item
 }
@@ -57,7 +56,7 @@ func New[T any](size int) *PriorityQueue[T] {
 }
 
 func (pq *PriorityQueue[T]) Push(value T, priority int) {
-	heap.Push(&pq.data, item[T]{ value, priority, -1 })
+	heap.Push(&pq.data, item[T]{value, priority, -1})
 }
 
 func (pq *PriorityQueue[T]) Pop() T {
@@ -71,4 +70,3 @@ func (pq *PriorityQueue[T]) Empty() bool {
 func (pq *PriorityQueue[T]) Peek() T {
 	return pq.data[len(pq.data)-1].value
 }
-

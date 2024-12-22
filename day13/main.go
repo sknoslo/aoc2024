@@ -57,17 +57,17 @@ func partone() string {
 		t := py*ax - px*ay
 		b := by*ax - bx*ay
 
-		if b == 0 || t % b != 0 {
+		if b == 0 || t%b != 0 {
 			continue
 		}
 		j := t / b
 		r := (px - j*bx)
-		if ax == 0 || r % ax != 0 {
+		if ax == 0 || r%ax != 0 {
 			continue
 		}
 		i := r / ax
 
-		tokens += i * 3 + j
+		tokens += i*3 + j
 	}
 	return fmt.Sprint(tokens)
 }
@@ -86,17 +86,17 @@ func parttwo() string {
 		t := py*ax - px*ay
 		b := by*ax - bx*ay
 
-		if b == 0 || t % b != 0 {
+		if b == 0 || t%b != 0 {
 			continue
 		}
 		j := t / b
 		r := (px - j*bx)
-		if ax == 0 || r % ax != 0 {
+		if ax == 0 || r%ax != 0 {
 			continue
 		}
 		i := r / ax
 
-		tokens += i * 3 + j
+		tokens += i*3 + j
 	}
 	return fmt.Sprint(tokens)
 }

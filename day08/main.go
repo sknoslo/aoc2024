@@ -42,10 +42,10 @@ func partone() string {
 				diff := a.Sub(b)
 				da := a.Add(diff)
 				db := b.Sub(diff)
-				if da.InRange(0,0,w-1,h-1) {
+				if da.InRange(0, 0, w-1, h-1) {
 					antinodes.Insert(da)
 				}
-				if db.InRange(0,0,w-1,h-1) {
+				if db.InRange(0, 0, w-1, h-1) {
 					antinodes.Insert(db)
 				}
 			}
@@ -82,11 +82,11 @@ func parttwo() string {
 				antinodes.Insert(a)
 				ds := a.Sub(diff)
 				da := a.Add(diff)
-				for ds.InRange(0,0,w-1,h-1) {
+				for ds.InRange(0, 0, w-1, h-1) {
 					antinodes.Insert(ds)
 					ds = ds.Sub(diff)
 				}
-				for da.InRange(0,0,w-1,h-1) {
+				for da.InRange(0, 0, w-1, h-1) {
 					antinodes.Insert(da)
 					da = da.Add(diff)
 				}

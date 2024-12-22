@@ -20,7 +20,7 @@ func main() {
 
 type step struct {
 	str string
-	i int
+	i   int
 }
 
 func partone() string {
@@ -40,7 +40,7 @@ func partone() string {
 		stack := stacks.New[step](len(towels))
 
 		for _, t := range towelmap[pattern[0]] {
-			stack.Push(step{ t, 0 })
+			stack.Push(step{t, 0})
 		}
 
 	stackloop:
@@ -48,12 +48,12 @@ func partone() string {
 			s := stack.Pop()
 
 			for i := 0; i < len(s.str); i++ {
-				if i + s.i >= len(pattern) || s.str[i] != pattern[i+s.i] {
+				if i+s.i >= len(pattern) || s.str[i] != pattern[i+s.i] {
 					continue stackloop
 				}
 			}
 
-			if s.i + len(s.str) == len(pattern) {
+			if s.i+len(s.str) == len(pattern) {
 				matches++
 				break stackloop
 			}
@@ -61,7 +61,7 @@ func partone() string {
 			ni := s.i + len(s.str)
 
 			for _, t := range towelmap[pattern[ni]] {
-				stack.Push(step{ t, ni })
+				stack.Push(step{t, ni})
 			}
 		}
 	}
@@ -84,7 +84,7 @@ func parttwo() string {
 
 	for _, pattern := range patterns {
 		match := func(i int, str string) bool {
-			if i + len(str) > len(pattern) {
+			if i+len(str) > len(pattern) {
 				return false
 			}
 
@@ -99,7 +99,7 @@ func parttwo() string {
 
 		c := make(map[int]int, 1024)
 		var rec func(int) int
-		rec = func (i int) int {
+		rec = func(i int) int {
 			if v, ok := c[i]; ok {
 				return v
 			}

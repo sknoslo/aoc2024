@@ -31,9 +31,9 @@ func partone() string {
 		secret := utils.MustAtoi(line)
 
 		for range 2_000 {
-			secret = prune(mix(secret, secret * 64))
-			secret = prune(mix(secret, secret / 32))
-			secret = prune(mix(secret, secret * 2048))
+			secret = prune(mix(secret, secret*64))
+			secret = prune(mix(secret, secret/32))
+			secret = prune(mix(secret, secret*2048))
 		}
 
 		sum += secret
@@ -54,14 +54,14 @@ func parttwo() string {
 		sequence := 0
 
 		for i := range 2_000 {
-			secret = prune(mix(secret, secret * 64))
-			secret = prune(mix(secret, secret / 32))
-			secret = prune(mix(secret, secret * 2048))
+			secret = prune(mix(secret, secret*64))
+			secret = prune(mix(secret, secret/32))
+			secret = prune(mix(secret, secret*2048))
 
 			next := secret % 10
 			change := next - last + 9 // don't deal with negative numbers
-			sequence &= 0x7fff // keep the newest 3 changes
-			sequence <<= 5 // make space for next change
+			sequence &= 0x7fff        // keep the newest 3 changes
+			sequence <<= 5            // make space for next change
 			sequence |= change
 
 			if i > 2 && !s[sequence] {

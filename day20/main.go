@@ -76,15 +76,15 @@ func findCheats(dists *grids.Grid[int], p0 vec2.Vec2) int {
 	cheats := 0
 
 	d0 := dists.CellAt(p0)
-	
-	for y := p0.Y - 20; y <= p0.Y + 20; y++ {
+
+	for y := p0.Y - 20; y <= p0.Y+20; y++ {
 		m := utils.AbsDiff(y, p0.Y)
-		for x := p0.X - 20 + m; x <= p0.X + 20 - m; x++ {
+		for x := p0.X - 20 + m; x <= p0.X+20-m; x++ {
 			p1 := vec2.New(x, y)
 			if dists.InGrid(p1) {
 				d1 := dists.CellAt(p1)
 				d := vec2.Distance(p0, p1)
-				if d1 != -1 && d0 - d1 - d >= target {
+				if d1 != -1 && d0-d1-d >= target {
 					cheats++
 				}
 			}

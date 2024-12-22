@@ -20,7 +20,7 @@ func main() {
 }
 
 type Memory struct {
-	s string
+	s     string
 	steps int
 }
 
@@ -41,15 +41,15 @@ func step(s string, steps int) int {
 	}
 
 	if s == "0" {
-		memo[key] = step("1", steps - 1)
-	} else if len(s) % 2 == 0 {
+		memo[key] = step("1", steps-1)
+	} else if len(s)%2 == 0 {
 		h := len(s) / 2
 
 		left := s[:h]
 		right := strconv.Itoa(utils.MustAtoi(s[h:])) // strip leading zeros
 		memo[key] = step(left, steps-1) + step(right, steps-1)
 	} else {
-		memo[key] = step(strconv.Itoa(utils.MustAtoi(s) * 2024), steps-1)
+		memo[key] = step(strconv.Itoa(utils.MustAtoi(s)*2024), steps-1)
 	}
 
 	return memo[key]
