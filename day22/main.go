@@ -4,8 +4,6 @@ import (
 	"sknoslo/aoc2024/utils"
 	"strconv"
 	"strings"
-
-	"github.com/hashicorp/go-set/v3"
 )
 
 var input string
@@ -44,13 +42,13 @@ func partone() string {
 }
 
 func parttwo() string {
-	bananas := make(map[int]int, 4096)
-
+	const maxsize = 0x92a52 // enough space to fit impossible worst case senario (seq 9, 9, 9, 9)
+	var bananas [maxsize]int
 	best := 0
 
 	for _, line := range strings.Split(input, "\n") {
 		secret := utils.MustAtoi(line)
-		s := set.New[int](2048)
+		var s [maxsize]bool
 
 		last := secret % 10
 		sequence := 0
@@ -61,18 +59,18 @@ func parttwo() string {
 			secret = prune(mix(secret, secret * 2048))
 
 			next := secret % 10
-			change := next - last + 10 // don't deal with negative numbers
-			sequence &= 0x3ffff // keep the newest 3 changes
-			sequence <<= 6 // make space for next change
+			change := next - last + 9 // don't deal with negative numbers
+			sequence &= 0x7fff // keep the newest 3 changes
+			sequence <<= 5 // make space for next change
 			sequence |= change
 
-			if i > 2 && !s.Contains(sequence) {
+			if i > 2 && !s[sequence] {
 				n := bananas[sequence] + next
 				bananas[sequence] = n
 				if n > best {
 					best = n
 				}
-				s.Insert(sequence)
+				s[sequence] = true
 			}
 
 			last = next
